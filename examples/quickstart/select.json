@@ -1,0 +1,19 @@
+{
+ "ledger": "out/ledger.sqlite3",
+ "image_batch": "quickstart-img-001",
+ "reviewer": "your name",
+ "picks": [
+  {
+   "selection_id": "pick-A",
+   "slot": "A",
+   "candidate": "img-A2",
+   "reason": "cleanest ceiling, hands only"
+  },
+  {
+   "selection_id": "pick-B",
+   "slot": "B",
+   "candidate": "img-B1",
+   "reason": "creator look to keep across takes"
+  }
+ ]
+}

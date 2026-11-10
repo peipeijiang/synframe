@@ -1,0 +1,20 @@
+# Private runs, paid outputs and research material stay local
+/examples/*
+!/examples/quickstart/
+/examples/quickstart/media/
+/examples/quickstart/out/
+/examples/quickstart/runs/
+/backups/
+/concepts_brief.md
+/file:synframe_*
+
+# Python and OS noise
+__pycache__/
+*.pyc
+.DS_Store
+
+# Local ledgers and credentials
+*.sqlite3
+*.sqlite3-*
+.env
+*.key

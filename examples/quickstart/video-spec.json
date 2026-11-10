@@ -1,0 +1,44 @@
+{
+ "batch_id": "quickstart-video-001",
+ "ledger": "out/ledger.sqlite3",
+ "out_dir": "out/videos",
+ "reviewer": "your name",
+ "creative_plan": "brief.md",
+ "product_images": [
+  "media/product.png"
+ ],
+ "defaults": {
+  "aspect_ratio": "9:16",
+  "prompt_suffix": "Vertical 9:16, photorealistic. No subtitles, no logo, no watermark."
+ },
+ "authorization": {
+  "spend_cap": 3,
+  "max_unit_price": 1,
+  "balance_reserve": 5
+ },
+ "poll": {
+  "interval_sec": 15,
+  "timeout_sec": 3600
+ },
+ "jobs": [
+  {
+   "id": "hooks-1",
+   "model": "omni_flash-10s",
+   "keyframes": [
+    "pick-A"
+   ],
+   "note": "per-call model: fill all 10 s with three hook scenes",
+   "prompt": "Energetic 10-second ad, three scenes with hard cuts (0-3 s, 3-6.5 s, 6.5-10 s). No speech, ambient sound only."
+  },
+  {
+   "id": "body-1",
+   "model": "minimax-h3",
+   "duration": 12,
+   "keyframes": [
+    "pick-B"
+   ],
+   "note": "per-second model: only the seconds the body and CTA need",
+   "prompt": "One continuous selfie take. She says exactly, lips in sync: \"<your approved line>\". She stops when the line ends."
+  }
+ ]
+}

@@ -1,0 +1,1501 @@
+{
+ "minimax-h3": {
+  "channel_constraints": [
+   {
+    "group_id": 1673,
+    "channel_group": "官方直连",
+    "unsupported": [],
+    "supported_options": {
+     "resolution": [
+      "768P",
+      "2K"
+     ]
+    }
+   },
+   {
+    "group_id": 1674,
+    "channel_group": "TX",
+    "unsupported": [],
+    "supported_options": {
+     "resolution": [
+      "768P",
+      "2K"
+     ]
+    }
+   },
+   {
+    "group_id": 1676,
+    "channel_group": "RQ2",
+    "unsupported": [
+     "该渠道文生模式不支持 2K / 4K"
+    ],
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "input_form",
+        "source": "derived",
+        "op": "in",
+        "values": [
+         "wensheng"
+        ]
+       },
+       {
+        "param": "resolution",
+        "op": "in",
+        "values": [
+         "2K",
+         "4K"
+        ]
+       }
+      ],
+      "message": "该渠道文生模式不支持 2K / 4K"
+     }
+    ]
+   },
+   {
+    "group_id": 1677,
+    "channel_group": "DMC-default",
+    "unsupported": [],
+    "supported_options": {
+     "resolution": [
+      "768P"
+     ]
+    }
+   },
+   {
+    "group_id": 1678,
+    "channel_group": "MC-H3特价",
+    "unsupported": [
+     "该渠道不支持首帧 / 首尾帧"
+    ],
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "input_form",
+        "source": "derived",
+        "op": "in",
+        "values": [
+         "shouzhen",
+         "shouweizhen"
+        ]
+       }
+      ],
+      "message": "该渠道不支持首帧 / 首尾帧"
+     }
+    ]
+   },
+   {
+    "group_id": 1679,
+    "channel_group": "XM",
+    "unsupported": [],
+    "supported_options": {
+     "resolution": [
+      "768P",
+      "2K"
+     ]
+    }
+   },
+   {
+    "group_id": 990001103,
+    "channel_group": "MT-default",
+    "unsupported": [],
+    "supported_options": {
+     "resolution": [
+      "768P",
+      "2K"
+     ]
+    }
+   }
+  ],
+  "channel_constraints_note": "当前启用线路各自的限制，与 options 的 currently_unavailable 相互独立（后者只看某档位有没有任何线路报价）。一条线路接某次请求须同时满足：① 传了的参数，其值都在该线路 supported_options 对应参数的列表内（列表里没有的参数不限）。注意按派单前补全后的参数判定：部分模型会按其它参数推出或改写参数，推出的值同样要在列表内，例如部分图片模型传 size 时会由它推出 resolution 与 aspect_ratio；② 该线路 capability_rules 中没有任何 effect=reject 的规则命中（一条规则的 when 条件全部成立才算命中）。若一组参数把全部线路都剔空，提交会返回「无可用渠道分组」。例如某线路不接 480p、其余线路不接首尾帧时，480p 文生视频与 720p 首尾帧都可用，但 480p + 首尾帧没有任何线路可接，调用前请确认至少还有一条线路同时满足全部参数。条件 op：in=传了且任一值在 values 内；not_in=传了且任一值不在 values 内；present=传了非空值；absent=没传或为空；count_gt / count_lt=值的个数大于 / 小于 value（没传按 0 个）；ext_in=传了且任一文件扩展名在 values 内；值比较不区分大小写，数组参数任一项满足即算。条件 source：不带=本模型 params 里的参数；derived=平台推导值，目前只有 input_form（没传任何参考素材=wensheng；mode=shouweizhen 且 images 1 张=shouzhen、2 张=shouweizhen；mode=cankaosheng 且带参考素材=cankaosheng / quanneng / quannengcankao，随模型家族）；protocol=原生请求体字段，目前只有 effort（Anthropic output_config.effort、OpenAI reasoning_effort、Responses reasoning.effort）；internal=平台内部参数，调用方无法也无需传入，一律按没传判定。effect=ignore 的规则不影响派单，表示该参数在此线路不生效、按默认处理。supported_options 已把能折算成选项子集的规则折进去，capability_rules 仍列出全部规则。unsupported 是给人看的文字提示（只列 reject 类），程序判定请以 supported_options 与 capability_rules 为准；group_id 与 GET /v1/skills/key/available-groups 的 group_id 同源。",
+  "description": "MiniMax H3 全形态一体：文生 / 首尾帧 / 参考生 / 全能参考（图+视频+音频）一个模型全包，直出 2K 有声视频，4～15 秒灵活时长。按秒计费、下单即扣清。",
+  "display_name": "MiniMax H3",
+  "input_hint": "描述你想要的画面、运动和氛围。首尾帧模式上传 1～2 张图；参考生模式可上传参考图（1～9 张）/ 参考视频 / 参考音频任意组合；什么都不传就是文生视频。",
+  "name": "minimax-h3",
+  "params": [
+   {
+    "name": "mode",
+    "label": "生成模式",
+    "type": "segment",
+    "required": false,
+    "description": "首尾帧：上传 1～2 张图作首帧 / 尾帧；参考生：参考图（1～9 张）/ 参考视频（最多 3 个）/ 参考音频（最多 3 段）任意组合。两种模式都可以不传素材，直接按提示词文生视频。",
+    "options": [
+     {
+      "value": "shouweizhen",
+      "label": "首尾帧"
+     },
+     {
+      "value": "cankaosheng",
+      "label": "参考生"
+     }
+    ]
+   },
+   {
+    "name": "images",
+    "label": "首尾帧",
+    "type": "upload",
+    "required": false,
+    "description": "首尾帧模式的图片：第 1 张首帧、第 2 张尾帧，最多 2 张。（传可公开访问的文件直链 URL；⚠️ 复数名参数（images/videos/clips/files/attachments/reference_urls）请一律传数组，即使只有一个文件也要写成 [\"https://...\"]，直接传字符串可能被部分模型判为参数格式错误；图片/音频类文件也支持 data:<mime>;base64,<数据> 内联传入，单文件解码后默认≤10MB、单次请求所有 base64 合计解码后默认≤30MB、请求体总大小默认≤50MB，视频文件仍需传 URL。OpenAI 兼容端点 /v1/images/generations、/v1/images/edits 的 JSON 参考图同样支持图片 base64 内联、上限相同（edits 也可用 multipart 传文件）。平台不提供文件托管，URL 方式请自行上传至 COS/CDN 等对象存储后传入直链）",
+    "applies_to_mode": [
+     "shouweizhen"
+    ],
+    "available_when": {
+     "mode": [
+      "shouweizhen"
+     ]
+    },
+    "upload_role": "首尾帧",
+    "upload_limits": {
+     "单文件MB": 20,
+     "宽高比区间": [
+      0.4,
+      2.5
+     ],
+     "最小边": 300,
+     "格式": [
+      "jpg",
+      "jpeg",
+      "png",
+      "webp"
+     ]
+    }
+   },
+   {
+    "name": "image_url",
+    "label": "参考图片",
+    "type": "upload",
+    "required": false,
+    "description": "参考生模式的参考图，0～9 张，可与参考视频 / 参考音频任意组合。（传可公开访问的文件直链 URL；⚠️ 复数名参数（images/videos/clips/files/attachments/reference_urls）请一律传数组，即使只有一个文件也要写成 [\"https://...\"]，直接传字符串可能被部分模型判为参数格式错误；图片/音频类文件也支持 data:<mime>;base64,<数据> 内联传入，单文件解码后默认≤10MB、单次请求所有 base64 合计解码后默认≤30MB、请求体总大小默认≤50MB，视频文件仍需传 URL。OpenAI 兼容端点 /v1/images/generations、/v1/images/edits 的 JSON 参考图同样支持图片 base64 内联、上限相同（edits 也可用 multipart 传文件）。平台不提供文件托管，URL 方式请自行上传至 COS/CDN 等对象存储后传入直链）",
+    "applies_to_mode": [
+     "cankaosheng"
+    ],
+    "available_when": {
+     "mode": [
+      "cankaosheng"
+     ]
+    },
+    "upload_role": "参考图",
+    "upload_limits": {
+     "单文件MB": 20,
+     "宽高比区间": [
+      0.4,
+      2.5
+     ],
+     "最小边": 300,
+     "格式": [
+      "jpg",
+      "jpeg",
+      "png",
+      "webp"
+     ]
+    }
+   },
+   {
+    "name": "video_url",
+    "label": "参考视频",
+    "type": "upload",
+    "required": false,
+    "description": "参考生模式的参考视频，0～3 个；按其时长额外按秒计费。（传可公开访问的文件直链 URL；⚠️ 复数名参数（images/videos/clips/files/attachments/reference_urls）请一律传数组，即使只有一个文件也要写成 [\"https://...\"]，直接传字符串可能被部分模型判为参数格式错误；图片/音频类文件也支持 data:<mime>;base64,<数据> 内联传入，单文件解码后默认≤10MB、单次请求所有 base64 合计解码后默认≤30MB、请求体总大小默认≤50MB，视频文件仍需传 URL。OpenAI 兼容端点 /v1/images/generations、/v1/images/edits 的 JSON 参考图同样支持图片 base64 内联、上限相同（edits 也可用 multipart 传文件）。平台不提供文件托管，URL 方式请自行上传至 COS/CDN 等对象存储后传入直链）",
+    "applies_to_mode": [
+     "cankaosheng"
+    ],
+    "available_when": {
+     "mode": [
+      "cankaosheng"
+     ]
+    },
+    "upload_role": "参考视频",
+    "upload_limits": {
+     "单文件MB": 50,
+     "宽高比区间": [
+      0.4,
+      2.5
+     ],
+     "帧率区间": [
+      23.976,
+      60
+     ],
+     "帧率容差": 0,
+     "总秒": 15,
+     "时长容差秒": 0,
+     "最短秒": 2,
+     "最长秒": 15,
+     "格式": [
+      "mp4",
+      "mov"
+     ],
+     "视频音轨编码": [
+      "aac",
+      "mp3"
+     ]
+    }
+   },
+   {
+    "name": "audio_url",
+    "label": "参考音频",
+    "type": "upload",
+    "required": false,
+    "description": "参考生模式的参考音频，0～3 段；音频免费。仅作节奏 / 风格参考，不会把原音频写入成片，也不做对口型——成片音轨由模型自行生成。（传可公开访问的文件直链 URL；⚠️ 复数名参数（images/videos/clips/files/attachments/reference_urls）请一律传数组，即使只有一个文件也要写成 [\"https://...\"]，直接传字符串可能被部分模型判为参数格式错误；图片/音频类文件也支持 data:<mime>;base64,<数据> 内联传入，单文件解码后默认≤10MB、单次请求所有 base64 合计解码后默认≤30MB、请求体总大小默认≤50MB，视频文件仍需传 URL。OpenAI 兼容端点 /v1/images/generations、/v1/images/edits 的 JSON 参考图同样支持图片 base64 内联、上限相同（edits 也可用 multipart 传文件）。平台不提供文件托管，URL 方式请自行上传至 COS/CDN 等对象存储后传入直链）",
+    "applies_to_mode": [
+     "cankaosheng"
+    ],
+    "available_when": {
+     "mode": [
+      "cankaosheng"
+     ]
+    },
+    "upload_role": "参考音频",
+    "upload_limits": {
+     "单文件MB": 20,
+     "总秒": 15,
+     "最长秒": 15,
+     "格式": [
+      "wav",
+      "mp3",
+      "m4a"
+     ]
+    }
+   },
+   {
+    "name": "duration",
+    "label": "视频时长",
+    "type": "select",
+    "required": true,
+    "description": "生成视频时长（秒），4~15 的整数；按秒计费，时长越长费用越高。参考视频的时长会按输出分辨率单价额外计费。",
+    "options": [
+     {
+      "value": "4",
+      "label": "4秒"
+     },
+     {
+      "value": "5",
+      "label": "5秒"
+     },
+     {
+      "value": "6",
+      "label": "6秒"
+     },
+     {
+      "value": "7",
+      "label": "7秒"
+     },
+     {
+      "value": "8",
+      "label": "8秒"
+     },
+     {
+      "value": "9",
+      "label": "9秒"
+     },
+     {
+      "value": "10",
+      "label": "10秒"
+     },
+     {
+      "value": "11",
+      "label": "11秒"
+     },
+     {
+      "value": "12",
+      "label": "12秒"
+     },
+     {
+      "value": "13",
+      "label": "13秒"
+     },
+     {
+      "value": "14",
+      "label": "14秒"
+     },
+     {
+      "value": "15",
+      "label": "15秒"
+     }
+    ]
+   },
+   {
+    "name": "aspect_ratio",
+    "label": "宽高比",
+    "type": "select",
+    "required": false,
+    "description": "生成视频的画面比例，默认自适应（由参考素材自动选择最佳比例），也可指定具体比例。",
+    "options": [
+     {
+      "value": "adaptive",
+      "label": "自适应"
+     },
+     {
+      "value": "16:9",
+      "label": "16:9"
+     },
+     {
+      "value": "9:16",
+      "label": "9:16"
+     },
+     {
+      "value": "1:1",
+      "label": "1:1"
+     },
+     {
+      "value": "4:3",
+      "label": "4:3"
+     },
+     {
+      "value": "3:4",
+      "label": "3:4"
+     },
+     {
+      "value": "21:9",
+      "label": "21:9"
+     }
+    ]
+   },
+   {
+    "name": "resolution",
+    "label": "视频分辨率",
+    "type": "select",
+    "required": true,
+    "description": "输出分辨率：768P 性价比高出片快；2K 超高清单价更高（含参考视频时输入秒数也按此单价计）。",
+    "options": [
+     {
+      "value": "768P",
+      "label": "768P"
+     },
+     {
+      "value": "1080P",
+      "label": "1080P"
+     },
+     {
+      "value": "2K",
+      "label": "2K"
+     },
+     {
+      "value": "4K",
+      "label": "4K"
+     }
+    ]
+   },
+   {
+    "name": "prompt",
+    "label": "提示词",
+    "type": "textarea",
+    "required": true,
+    "description": "生成提示词。POST /v1/media/generate 请求体顶层或 params 内任传其一即可；同时传时以顶层为准。"
+   }
+  ],
+  "protocols": [
+   {
+    "base_url_suffix": "/v1",
+    "description": "本站自有的图片 / 视频 / 音频生成协议：POST /v1/media/generate 创建任务，GET /v1/media/status 轮询结果，参数即模型详情里的 params 表。",
+    "docs": [],
+    "endpoints": {
+     "创建": {
+      "method": "POST",
+      "path": "/v1/media/generate"
+     },
+     "增强查询": {
+      "method": "GET",
+      "path": "/v1/skills/task-status?task_id={id}"
+     },
+     "查询": {
+      "method": "GET",
+      "path": "/v1/media/status?task_id={id}"
+     },
+     "模型列表": {
+      "method": "GET",
+      "path": "/v1/media/models?type={type}"
+     }
+    },
+    "is_default": true,
+    "model_names": [
+     "minimax-h3"
+    ],
+    "name": "本站媒体协议",
+    "name_en": "Platform Media API",
+    "protocol": "media",
+    "sdk_hint": "本站自有协议，用 fetch / axios / requests 直接发 JSON 即可，也可用 /v1/skills/* 系列接口做发现与状态查询"
+   },
+   {
+    "base_url_suffix": "",
+    "description": "与 MiniMax 官方视频 V2 同格式：Base URL 换成本站，model 传 MiniMax-H3 / MiniMax-H3-Max，客户端自己拼 /v2/...。",
+    "docs": [
+     {
+      "title": "MiniMax 官方文档：创建视频生成任务",
+      "url": "https://platform.minimax.io/docs/api-reference/video-generation-v2-create"
+     },
+     {
+      "title": "MiniMax 官方文档：查询视频生成任务",
+      "url": "https://platform.minimax.io/docs/api-reference/video-generation-v2-query"
+     },
+     {
+      "title": "MiniMax 官方文档：任务列表",
+      "url": "https://platform.minimax.io/docs/api-reference/video-generation-v2-list"
+     }
+    ],
+    "endpoints": {
+     "再生成": {
+      "method": "POST",
+      "path": "/v2/video_regeneration"
+     },
+     "列表": {
+      "method": "GET",
+      "path": "/v2/query/video_generation"
+     },
+     "创建": {
+      "method": "POST",
+      "path": "/v2/video_generation"
+     },
+     "删除": {
+      "method": "DELETE",
+      "path": "/v2/video_generation/{task_id}"
+     },
+     "查询": {
+      "method": "GET",
+      "path": "/v2/query/video_generation/{task_id}"
+     }
+    },
+    "is_default": false,
+    "model_names": [
+     "MiniMax-H3"
+    ],
+    "name": "MiniMax 官方视频格式",
+    "name_en": "MiniMax Official Video API",
+    "protocol": "minimax",
+    "sdk_hint": "MiniMax 官方 HTTP 接口或任意 HTTP 客户端；Base URL 填站点根或 /api"
+   }
+  ],
+  "tags": [
+   "全形态一体",
+   "文生视频",
+   "首尾帧",
+   "参考生视频",
+   "多模态参考",
+   "2K高清",
+   "有声视频"
+  ],
+  "type": "video"
+ },
+ "tt-image-2.6": {
+  "channel_constraints": [
+   {
+    "group_id": 990001348,
+    "channel_group": "WD-img26-tejia",
+    "unsupported": [
+     "该渠道不支持透明背景",
+     "该渠道 GIF 固定 9 帧",
+     "该渠道 GIF 每帧固定 200 毫秒"
+    ],
+    "supported_options": {
+     "background": [
+      "auto",
+      "opaque"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       }
+      ],
+      "message": "该渠道不支持透明背景"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_count",
+        "op": "not_in",
+        "values": [
+         "9"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 固定 9 帧"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_duration_ms",
+        "op": "not_in",
+        "values": [
+         "200"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 每帧固定 200 毫秒"
+     }
+    ]
+   },
+   {
+    "group_id": 990001349,
+    "channel_group": "ABC默认",
+    "unsupported": [
+     "该渠道不支持透明背景"
+    ],
+    "supported_options": {
+     "background": [
+      "auto",
+      "opaque"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       }
+      ],
+      "message": "该渠道不支持透明背景"
+     }
+    ]
+   },
+   {
+    "group_id": 990001350,
+    "channel_group": "AIX-特殊分组",
+    "unsupported": [
+     "该渠道不支持透明背景"
+    ],
+    "supported_options": {
+     "background": [
+      "auto",
+      "opaque"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       }
+      ],
+      "message": "该渠道不支持透明背景"
+     }
+    ]
+   },
+   {
+    "group_id": 990001351,
+    "channel_group": "ABC_codex分组",
+    "unsupported": [
+     "该渠道不支持透明背景"
+    ],
+    "supported_options": {
+     "background": [
+      "auto",
+      "opaque"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       }
+      ],
+      "message": "该渠道不支持透明背景"
+     }
+    ]
+   },
+   {
+    "group_id": 990001352,
+    "channel_group": "ABC-codex",
+    "unsupported": [
+     "该渠道不支持透明背景"
+    ],
+    "supported_options": {
+     "background": [
+      "auto",
+      "opaque"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       }
+      ],
+      "message": "该渠道不支持透明背景"
+     }
+    ]
+   },
+   {
+    "group_id": 990001353,
+    "channel_group": "ZG-TT-Image-2",
+    "unsupported": [
+     "该渠道不支持透明背景",
+     "该渠道 GIF 固定 9 帧",
+     "该渠道 GIF 每帧固定 200 毫秒"
+    ],
+    "supported_options": {
+     "background": [
+      "auto",
+      "opaque"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       }
+      ],
+      "message": "该渠道不支持透明背景"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_count",
+        "op": "not_in",
+        "values": [
+         "9"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 固定 9 帧"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_duration_ms",
+        "op": "not_in",
+        "values": [
+         "200"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 每帧固定 200 毫秒"
+     }
+    ]
+   },
+   {
+    "group_id": 990001354,
+    "channel_group": "ZG-TT-Image-3",
+    "unsupported": [
+     "该渠道不支持透明背景",
+     "该渠道 GIF 固定 9 帧",
+     "该渠道 GIF 每帧固定 200 毫秒"
+    ],
+    "supported_options": {
+     "background": [
+      "auto",
+      "opaque"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       }
+      ],
+      "message": "该渠道不支持透明背景"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_count",
+        "op": "not_in",
+        "values": [
+         "9"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 固定 9 帧"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_duration_ms",
+        "op": "not_in",
+        "values": [
+         "200"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 每帧固定 200 毫秒"
+     }
+    ]
+   },
+   {
+    "group_id": 990001359,
+    "channel_group": "PL-AIGC-img26",
+    "unsupported": [
+     "该渠道 GIF 固定 9 帧",
+     "该渠道 GIF 每帧固定 200 毫秒",
+     "该渠道不支持 SVG 矢量图"
+    ],
+    "supported_options": {
+     "output_format": [
+      "png",
+      "jpeg",
+      "webp",
+      "gif"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_count",
+        "op": "not_in",
+        "values": [
+         "9"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 固定 9 帧"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_duration_ms",
+        "op": "not_in",
+        "values": [
+         "200"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 每帧固定 200 毫秒"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "svg"
+        ]
+       }
+      ],
+      "message": "该渠道不支持 SVG 矢量图"
+     }
+    ]
+   },
+   {
+    "group_id": 990001360,
+    "channel_group": "BR-img26-tejia",
+    "unsupported": [
+     "该渠道 GIF 固定 9 帧",
+     "该渠道 GIF 每帧固定 200 毫秒",
+     "该渠道不支持 SVG 矢量图"
+    ],
+    "supported_options": {
+     "output_format": [
+      "png",
+      "jpeg",
+      "webp",
+      "gif"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_count",
+        "op": "not_in",
+        "values": [
+         "9"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 固定 9 帧"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_duration_ms",
+        "op": "not_in",
+        "values": [
+         "200"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 每帧固定 200 毫秒"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "svg"
+        ]
+       }
+      ],
+      "message": "该渠道不支持 SVG 矢量图"
+     }
+    ]
+   },
+   {
+    "group_id": 990001369,
+    "channel_group": "XT-img26b",
+    "unsupported": [
+     "该渠道不支持 SVG 矢量图",
+     "该渠道 GIF 固定 9 帧",
+     "该渠道 GIF 每帧时长不可调（约 180 毫秒）",
+     "该渠道透明背景不支持 JPEG 格式"
+    ],
+    "supported_options": {
+     "output_format": [
+      "png",
+      "jpeg",
+      "webp",
+      "gif"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "svg"
+        ]
+       }
+      ],
+      "message": "该渠道不支持 SVG 矢量图"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_count",
+        "op": "not_in",
+        "values": [
+         "9"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 固定 9 帧"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_duration_ms",
+        "op": "not_in",
+        "values": [
+         "200"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 每帧时长不可调（约 180 毫秒）"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       },
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "jpeg"
+        ]
+       }
+      ],
+      "message": "该渠道透明背景不支持 JPEG 格式"
+     }
+    ]
+   },
+   {
+    "group_id": 990001370,
+    "channel_group": "XT-img26ys",
+    "unsupported": [
+     "该渠道不支持 SVG 矢量图",
+     "该渠道 GIF 固定 9 帧",
+     "该渠道 GIF 每帧时长不可调（约 180 毫秒）",
+     "该渠道透明背景不支持 JPEG 格式"
+    ],
+    "supported_options": {
+     "output_format": [
+      "png",
+      "jpeg",
+      "webp",
+      "gif"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "svg"
+        ]
+       }
+      ],
+      "message": "该渠道不支持 SVG 矢量图"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_count",
+        "op": "not_in",
+        "values": [
+         "9"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 固定 9 帧"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "gif"
+        ]
+       },
+       {
+        "param": "frame_duration_ms",
+        "op": "not_in",
+        "values": [
+         "200"
+        ]
+       }
+      ],
+      "message": "该渠道 GIF 每帧时长不可调（约 180 毫秒）"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       },
+       {
+        "param": "output_format",
+        "op": "in",
+        "values": [
+         "jpeg"
+        ]
+       }
+      ],
+      "message": "该渠道透明背景不支持 JPEG 格式"
+     }
+    ]
+   },
+   {
+    "group_id": 990001371,
+    "channel_group": "img-liang",
+    "unsupported": [
+     "该渠道不支持透明背景",
+     "该渠道不支持调节复杂度"
+    ],
+    "supported_options": {
+     "background": [
+      "auto",
+      "opaque"
+     ],
+     "complexity": [
+      "medium"
+     ]
+    },
+    "capability_rules": [
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "background",
+        "op": "in",
+        "values": [
+         "transparent"
+        ]
+       }
+      ],
+      "message": "该渠道不支持透明背景"
+     },
+     {
+      "effect": "reject",
+      "when": [
+       {
+        "param": "complexity",
+        "op": "not_in",
+        "values": [
+         "medium"
+        ]
+       }
+      ],
+      "message": "该渠道不支持调节复杂度"
+     }
+    ]
+   }
+  ],
+  "channel_constraints_note": "当前启用线路各自的限制，与 options 的 currently_unavailable 相互独立（后者只看某档位有没有任何线路报价）。一条线路接某次请求须同时满足：① 传了的参数，其值都在该线路 supported_options 对应参数的列表内（列表里没有的参数不限）。注意按派单前补全后的参数判定：部分模型会按其它参数推出或改写参数，推出的值同样要在列表内，例如部分图片模型传 size 时会由它推出 resolution 与 aspect_ratio；② 该线路 capability_rules 中没有任何 effect=reject 的规则命中（一条规则的 when 条件全部成立才算命中）。若一组参数把全部线路都剔空，提交会返回「无可用渠道分组」。例如某线路不接 480p、其余线路不接首尾帧时，480p 文生视频与 720p 首尾帧都可用，但 480p + 首尾帧没有任何线路可接，调用前请确认至少还有一条线路同时满足全部参数。条件 op：in=传了且任一值在 values 内；not_in=传了且任一值不在 values 内；present=传了非空值；absent=没传或为空；count_gt / count_lt=值的个数大于 / 小于 value（没传按 0 个）；ext_in=传了且任一文件扩展名在 values 内；值比较不区分大小写，数组参数任一项满足即算。条件 source：不带=本模型 params 里的参数；derived=平台推导值，目前只有 input_form（没传任何参考素材=wensheng；mode=shouweizhen 且 images 1 张=shouzhen、2 张=shouweizhen；mode=cankaosheng 且带参考素材=cankaosheng / quanneng / quannengcankao，随模型家族）；protocol=原生请求体字段，目前只有 effort（Anthropic output_config.effort、OpenAI reasoning_effort、Responses reasoning.effort）；internal=平台内部参数，调用方无法也无需传入，一律按没传判定。effect=ignore 的规则不影响派单，表示该参数在此线路不生效、按默认处理。supported_options 已把能折算成选项子集的规则折进去，capability_rules 仍列出全部规则。unsupported 是给人看的文字提示（只列 reject 类），程序判定请以 supported_options 与 capability_rules 为准；group_id 与 GET /v1/skills/key/available-groups 的 group_id 同源。",
+  "description": "新一代图像模型 2.6 代，按次计费。标准版 / 增强版两档可选，画质六档、复杂度三档自由搭配；除常规位图外，还能直接输出 SVG 矢量图与 GIF 小动图，GIF / SVG 与静图同价。适合图标、Logo、表情动图、海报与社媒配图。",
+  "display_name": "TT Image 2.6",
+  "input_hint": "推荐用《主体 + 场景 + 风格 + 光线 + 氛围》的结构写提示词；可上传 1~16 张参考图用于图生图 / 局部编辑 / 多图融合。标准版性价比高、出图快，增强版细节更足；除常规 PNG / JPEG / WebP 外，还能直接输出 SVG 矢量图和 GIF 动图。画质档位越高，等待时间越长。",
+  "name": "tt-image-2.6",
+  "params": [
+   {
+    "name": "prompt",
+    "label": "提示词",
+    "type": "textarea",
+    "required": true,
+    "description": "描述你想要生成的图片内容，支持中英文，越具体越好。（即 POST /v1/media/generate 请求体顶层的 prompt：顶层或 params 内任传其一即可，无需重复传；同时传时以顶层为准。）"
+   },
+   {
+    "name": "images",
+    "label": "参考图片",
+    "type": "upload",
+    "required": false,
+    "description": "上传 1~16 张参考图用于图生图、多图融合或局部编辑；不传即为纯文生图。部分渠道不支持参考图，上传后会自动改派支持的渠道。（传可公开访问的文件直链 URL；⚠️ 复数名参数（images/videos/clips/files/attachments/reference_urls）请一律传数组，即使只有一个文件也要写成 [\"https://...\"]，直接传字符串可能被部分模型判为参数格式错误；图片/音频类文件也支持 data:<mime>;base64,<数据> 内联传入，单文件解码后默认≤10MB、单次请求所有 base64 合计解码后默认≤30MB、请求体总大小默认≤50MB，视频文件仍需传 URL。OpenAI 兼容端点 /v1/images/generations、/v1/images/edits 的 JSON 参考图同样支持图片 base64 内联、上限相同（edits 也可用 multipart 传文件）。平台不提供文件托管，URL 方式请自行上传至 COS/CDN 等对象存储后传入直链）"
+   },
+   {
+    "name": "version",
+    "label": "模型版本",
+    "type": "select",
+    "required": false,
+    "description": "标准版出图快、性价比高；增强版细节更丰富、复杂构图更稳。",
+    "options": [
+     {
+      "value": "flare",
+      "label": "标准版"
+     },
+     {
+      "value": "sunburst",
+      "label": "增强版"
+     }
+    ]
+   },
+   {
+    "name": "aspect_ratio",
+    "label": "图片比例",
+    "type": "select",
+    "required": false,
+    "description": "生成图片的画幅比例。选「自适应」时由模型按提示词或参考图自行决定画幅，此时分辨率也会跟着变为自适应。",
+    "options": [
+     {
+      "value": "auto",
+      "label": "自适应"
+     },
+     {
+      "value": "1:1",
+      "label": "1:1 正方形"
+     },
+     {
+      "value": "16:9",
+      "label": "16:9 横屏"
+     },
+     {
+      "value": "9:16",
+      "label": "9:16 竖屏"
+     },
+     {
+      "value": "4:3",
+      "label": "4:3 横版"
+     },
+     {
+      "value": "3:4",
+      "label": "3:4 竖版"
+     },
+     {
+      "value": "3:2",
+      "label": "3:2 横版"
+     },
+     {
+      "value": "2:3",
+      "label": "2:3 竖版"
+     },
+     {
+      "value": "5:4",
+      "label": "5:4 横版"
+     },
+     {
+      "value": "4:5",
+      "label": "4:5 竖版"
+     },
+     {
+      "value": "2:1",
+      "label": "2:1 超宽横版"
+     },
+     {
+      "value": "1:2",
+      "label": "1:2 超长竖版"
+     },
+     {
+      "value": "21:9",
+      "label": "21:9 影院宽幅"
+     },
+     {
+      "value": "9:21",
+      "label": "9:21 超长竖幅"
+     }
+    ]
+   },
+   {
+    "name": "resolution",
+    "label": "分辨率",
+    "type": "select",
+    "required": false,
+    "description": "出图清晰度档位：1K 约 100 万像素、2K 约 400 万像素、4K 最高 3840×2160。选「自适应」时交给模型决定尺寸（此时比例也会变为自适应）；比例为自适应而分辨率未指定时按 1K 出图。",
+    "options": [
+     {
+      "value": "auto",
+      "label": "自适应"
+     },
+     {
+      "value": "1K",
+      "label": "1K"
+     },
+     {
+      "value": "2K",
+      "label": "2K"
+     },
+     {
+      "value": "4K",
+      "label": "4K"
+     }
+    ]
+   },
+   {
+    "name": "quality",
+    "label": "画质",
+    "type": "select",
+    "required": false,
+    "description": "渲染质量档位，越高细节越足、耗时越长。推荐 auto 由模型自动选择。",
+    "options": [
+     {
+      "value": "auto",
+      "label": "自适应"
+     },
+     {
+      "value": "low",
+      "label": "低"
+     },
+     {
+      "value": "medium",
+      "label": "中"
+     },
+     {
+      "value": "high",
+      "label": "高"
+     },
+     {
+      "value": "xhigh",
+      "label": "超高"
+     },
+     {
+      "value": "max",
+      "label": "极致"
+     }
+    ]
+   },
+   {
+    "name": "complexity",
+    "label": "复杂度",
+    "type": "select",
+    "required": false,
+    "description": "控制画面元素多少与细节密度：低适合图标 / Logo / 简约插画，高适合海报与场景大图。",
+    "options": [
+     {
+      "value": "low",
+      "label": "低"
+     },
+     {
+      "value": "medium",
+      "label": "中"
+     },
+     {
+      "value": "high",
+      "label": "高"
+     }
+    ]
+   },
+   {
+    "name": "output_format",
+    "label": "输出格式",
+    "type": "select",
+    "required": false,
+    "description": "成品文件格式：PNG / JPEG / WebP 为常规位图；SVG 为矢量图，可无限放大；GIF 为小动图（默认 9 帧、每帧 0.2 秒，部分渠道可自定义帧数与每帧时长）。各格式同价。GIF 的尺寸由模型决定，选 GIF 时「图片比例」与「分辨率」不生效。",
+    "options": [
+     {
+      "value": "png",
+      "label": "PNG"
+     },
+     {
+      "value": "jpeg",
+      "label": "JPEG"
+     },
+     {
+      "value": "webp",
+      "label": "WebP"
+     },
+     {
+      "value": "svg",
+      "label": "SVG 矢量图"
+     },
+     {
+      "value": "gif",
+      "label": "GIF 动图"
+     }
+    ]
+   },
+   {
+    "name": "background",
+    "label": "背景",
+    "type": "select",
+    "required": false,
+    "description": "背景处理方式：自适应由模型决定，不透明输出实色背景，透明输出带透明通道的 PNG / WebP（适合贴纸、图标、商品抠图，部分渠道不支持时自动换支持的渠道）。",
+    "options": [
+     {
+      "value": "auto",
+      "label": "自适应"
+     },
+     {
+      "value": "opaque",
+      "label": "不透明"
+     },
+     {
+      "value": "transparent",
+      "label": "透明"
+     }
+    ]
+   },
+   {
+    "name": "frame_count",
+    "label": "GIF 帧数",
+    "type": "select",
+    "required": false,
+    "description": "仅输出 GIF 时生效：动图总帧数，帧数越多动作越连贯。部分渠道固定 9 帧，选其它帧数时只派给支持自定义的渠道。",
+    "options": [
+     {
+      "value": "4",
+      "label": "4 帧"
+     },
+     {
+      "value": "6",
+      "label": "6 帧"
+     },
+     {
+      "value": "9",
+      "label": "9 帧"
+     },
+     {
+      "value": "12",
+      "label": "12 帧"
+     },
+     {
+      "value": "16",
+      "label": "16 帧"
+     }
+    ],
+    "available_when": {
+     "参数等于": {
+      "output_format": [
+       "gif"
+      ]
+     }
+    }
+   },
+   {
+    "name": "frame_duration_ms",
+    "label": "GIF 每帧时长",
+    "type": "select",
+    "required": false,
+    "description": "仅输出 GIF 时生效：每帧停留时长（毫秒），越短播放越快。部分渠道固定 200 毫秒，选其它时长时只派给支持自定义的渠道。",
+    "options": [
+     {
+      "value": "100",
+      "label": "100 毫秒"
+     },
+     {
+      "value": "200",
+      "label": "200 毫秒"
+     },
+     {
+      "value": "300",
+      "label": "300 毫秒"
+     },
+     {
+      "value": "500",
+      "label": "500 毫秒"
+     },
+     {
+      "value": "1000",
+      "label": "1000 毫秒"
+     }
+    ],
+    "available_when": {
+     "参数等于": {
+      "output_format": [
+       "gif"
+      ]
+     }
+    }
+   },
+   {
+    "name": "size",
+    "label": "自定义尺寸",
+    "type": "input",
+    "required": false,
+    "description": "高级用法：直接传官方格式的像素尺寸（如 1536x864）或 auto，宽高须为 16 的倍数、比例在 1:3~3:1 之间、总像素 655360~8294400。传了本参数时忽略「图片比例」与「分辨率」两项。⚠️ 本参数只接受像素写法或 auto：清晰度档位请传「分辨率」resolution 参数，画面比例请传「图片比例」aspect_ratio 参数。误填进来的 1K / 2K / 4K 会按 resolution 处理，但须同时传具体的 aspect_ratio，否则返回 400；误填的 16:9 / 9:16 等比例会按 aspect_ratio 处理；与显式传的 resolution / aspect_ratio 不一致时返回 400。"
+   }
+  ],
+  "tags": [
+   "文生图",
+   "图生图",
+   "矢量图",
+   "动图"
+  ],
+  "type": "image"
+ }
+}

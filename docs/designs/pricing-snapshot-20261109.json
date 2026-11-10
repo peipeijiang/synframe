@@ -1,0 +1,554 @@
+{
+ "captured_at": "2026-11-09T15:53:14.723655+08:00",
+ "source": "GET https://api.lk888.ai/v1/skills/models/<model>/pricing (read-only)",
+ "models": {
+  "minimax-h3": [
+   {
+    "group_name": "DMC-default",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按秒",
+    "base_price": 0.1123,
+    "success_rate_24h": 100,
+    "avg_response_seconds": 607.76,
+    "options": [
+     [
+      "resolution",
+      "768P",
+      0.1123
+     ]
+    ]
+   },
+   {
+    "group_name": "MC-H3特价",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按秒",
+    "base_price": 0.1498,
+    "success_rate_24h": 86.79,
+    "avg_response_seconds": 274.37,
+    "options": [
+     [
+      "resolution",
+      "768P",
+      0.1498
+     ],
+     [
+      "resolution",
+      "4K",
+      0.3558
+     ],
+     [
+      "resolution",
+      "1080P",
+      0.2809
+     ],
+     [
+      "resolution",
+      "2K",
+      0.2996
+     ]
+    ]
+   },
+   {
+    "group_name": "RQ2",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按秒",
+    "base_price": 0.1647,
+    "success_rate_24h": 100,
+    "avg_response_seconds": 200.33,
+    "options": [
+     [
+      "resolution",
+      "2K",
+      0.4118
+     ],
+     [
+      "resolution",
+      "768P",
+      0.1647
+     ],
+     [
+      "resolution",
+      "1080P",
+      0.2882
+     ],
+     [
+      "resolution",
+      "4K",
+      0.5147
+     ]
+    ]
+   },
+   {
+    "group_name": "RQ",
+    "is_active": false,
+    "in_key_whitelist": true,
+    "billing_method": "按秒",
+    "base_price": 0.1685,
+    "success_rate_24h": 0,
+    "avg_response_seconds": 0,
+    "options": [
+     [
+      "resolution",
+      "768P",
+      0.1685
+     ],
+     [
+      "resolution",
+      "2K",
+      0.2808
+     ],
+     [
+      "resolution",
+      "1080P",
+      0.2808
+     ],
+     [
+      "resolution",
+      "4K",
+      0.3557
+     ]
+    ]
+   },
+   {
+    "group_name": "MT-default",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按秒",
+    "base_price": 0.1853,
+    "success_rate_24h": 86.76,
+    "avg_response_seconds": 237.75,
+    "options": [
+     [
+      "resolution",
+      "768P",
+      0.1853
+     ],
+     [
+      "resolution",
+      "2K",
+      0.3088
+     ]
+    ]
+   },
+   {
+    "group_name": "YS-特惠线",
+    "is_active": false,
+    "in_key_whitelist": false,
+    "billing_method": "按秒",
+    "base_price": 0.2359,
+    "success_rate_24h": 0,
+    "avg_response_seconds": 0,
+    "options": [
+     [
+      "resolution",
+      "1080P",
+      0.3932
+     ],
+     [
+      "resolution",
+      "768P",
+      0.3145
+     ],
+     [
+      "resolution",
+      "2K",
+      0.4718
+     ]
+    ]
+   },
+   {
+    "group_name": "DE-mm-of-pro",
+    "is_active": false,
+    "in_key_whitelist": false,
+    "billing_method": "按秒",
+    "base_price": 0.5616,
+    "success_rate_24h": -1,
+    "avg_response_seconds": 0,
+    "options": [
+     [
+      "resolution",
+      "2K",
+      0.7488
+     ],
+     [
+      "resolution",
+      "768P",
+      0.5616
+     ]
+    ]
+   },
+   {
+    "group_name": "XM",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按秒",
+    "base_price": 0.702,
+    "success_rate_24h": 91.25448028673834,
+    "avg_response_seconds": 224,
+    "options": [
+     [
+      "resolution",
+      "768P",
+      0.702
+     ],
+     [
+      "resolution",
+      "2K",
+      1.1232
+     ]
+    ]
+   },
+   {
+    "group_name": "TX",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按秒",
+    "base_price": 0.8424,
+    "success_rate_24h": 86.51092690278824,
+    "avg_response_seconds": 0,
+    "options": [
+     [
+      "resolution",
+      "2K",
+      1.3478
+     ],
+     [
+      "resolution",
+      "768P",
+      0.8424
+     ]
+    ]
+   },
+   {
+    "group_name": "官方直连",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按秒",
+    "base_price": 0.936,
+    "success_rate_24h": 88.73065015479877,
+    "avg_response_seconds": 271.5,
+    "options": [
+     [
+      "resolution",
+      "768P",
+      0.936
+     ],
+     [
+      "resolution",
+      "2K",
+      1.4976
+     ]
+    ]
+   }
+  ],
+  "omni-flash": [
+   {
+    "group_name": "XT-flow",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按秒",
+    "base_price": 0.1031,
+    "success_rate_24h": 56.25,
+    "avg_response_seconds": 172.74,
+    "options": [
+     [
+      "resolution",
+      "720p",
+      0.1031
+     ],
+     [
+      "resolution",
+      "1080p",
+      0.2064
+     ],
+     [
+      "enhance_prompt",
+      "false",
+      0.1031
+     ],
+     [
+      "enable_upsample",
+      "false",
+      0.1031
+     ]
+    ]
+   },
+   {
+    "group_name": "MC-omni",
+    "is_active": false,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.4493,
+    "success_rate_24h": 88.54408724784375,
+    "avg_response_seconds": 0,
+    "options": [
+     [
+      "duration",
+      "8",
+      0.8986
+     ],
+     [
+      "duration",
+      "6",
+      0.6739
+     ],
+     [
+      "duration",
+      "10",
+      1.1232
+     ],
+     [
+      "duration",
+      "4",
+      0.4493
+     ],
+     [
+      "resolution",
+      "720p",
+      0.4493
+     ]
+    ]
+   },
+   {
+    "group_name": "ZZ-默认",
+    "is_active": false,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 2.4336,
+    "success_rate_24h": 44.5480093676815,
+    "avg_response_seconds": 0,
+    "options": []
+   },
+   {
+    "group_name": "ZZ-限时体验",
+    "is_active": false,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 3.407,
+    "success_rate_24h": 0.7641921397379913,
+    "avg_response_seconds": 0,
+    "options": []
+   }
+  ],
+  "omni_flash-10s": [
+   {
+    "group_name": "zyg_auth",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按次",
+    "base_price": 0.9547,
+    "success_rate_24h": 61.65,
+    "avg_response_seconds": 135.98,
+    "options": []
+   },
+   {
+    "group_name": "zyg_default",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按次",
+    "base_price": 0.9547,
+    "success_rate_24h": 52.38,
+    "avg_response_seconds": 133.17,
+    "options": []
+   },
+   {
+    "group_name": "zyg_svip",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按次",
+    "base_price": 0.9547,
+    "success_rate_24h": 57.24,
+    "avg_response_seconds": 137.28,
+    "options": []
+   },
+   {
+    "group_name": "zyg_vip",
+    "is_active": false,
+    "in_key_whitelist": true,
+    "billing_method": "按次",
+    "base_price": 0.9547,
+    "success_rate_24h": 52.38,
+    "avg_response_seconds": 138.05,
+    "options": []
+   },
+   {
+    "group_name": "SC-默认分组",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 1.4976,
+    "success_rate_24h": 84.38,
+    "avg_response_seconds": 128.57,
+    "options": []
+   },
+   {
+    "group_name": "XBS-default",
+    "is_active": false,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 2.7331,
+    "success_rate_24h": 32.16836734693877,
+    "avg_response_seconds": 0,
+    "options": []
+   },
+   {
+    "group_name": "YS-星算线",
+    "is_active": false,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 2.9484,
+    "success_rate_24h": 26.238738738738736,
+    "avg_response_seconds": 0,
+    "options": []
+   }
+  ],
+  "seedance-2.0-anci": [
+   {
+    "group_name": "YS-星算线",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按次",
+    "base_price": 7.2072,
+    "success_rate_24h": 92,
+    "avg_response_seconds": 462.99,
+    "options": [
+     [
+      "version",
+      "快速",
+      7.2072
+     ],
+     [
+      "version",
+      "标准",
+      9.2664
+     ]
+    ]
+   }
+  ],
+  "tt-image-2.6": [
+   {
+    "group_name": "XT-img26b",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.0288,
+    "success_rate_24h": 99.19,
+    "avg_response_seconds": 37.39,
+    "options": []
+   },
+   {
+    "group_name": "XT-img26ys",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.0288,
+    "success_rate_24h": 99.06,
+    "avg_response_seconds": 35.17,
+    "options": []
+   },
+   {
+    "group_name": "WD-img26-tejia",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按次",
+    "base_price": 0.029,
+    "success_rate_24h": 98.65,
+    "avg_response_seconds": 40.86,
+    "options": []
+   },
+   {
+    "group_name": "img-liang",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.03,
+    "success_rate_24h": 98.54,
+    "avg_response_seconds": 38.54,
+    "options": []
+   },
+   {
+    "group_name": "BR-img26-tejia",
+    "is_active": true,
+    "in_key_whitelist": true,
+    "billing_method": "按次",
+    "base_price": 0.0749,
+    "success_rate_24h": 100,
+    "avg_response_seconds": 39.83,
+    "options": []
+   },
+   {
+    "group_name": "ZG-TT-Image-2",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.2024,
+    "success_rate_24h": 77.59882869692532,
+    "avg_response_seconds": 32.25,
+    "options": []
+   },
+   {
+    "group_name": "ABC默认",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.2059,
+    "success_rate_24h": 100,
+    "avg_response_seconds": 42.4,
+    "options": []
+   },
+   {
+    "group_name": "ABC_codex分组",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.2059,
+    "success_rate_24h": 100,
+    "avg_response_seconds": 38.47,
+    "options": []
+   },
+   {
+    "group_name": "ABC-codex",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.2059,
+    "success_rate_24h": 100,
+    "avg_response_seconds": 42.6,
+    "options": []
+   },
+   {
+    "group_name": "PL-AIGC-img26",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.2059,
+    "success_rate_24h": 100,
+    "avg_response_seconds": 39.87,
+    "options": []
+   },
+   {
+    "group_name": "ZG-TT-Image-3",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.3035,
+    "success_rate_24h": 100,
+    "avg_response_seconds": 38.32,
+    "options": []
+   },
+   {
+    "group_name": "AIX-特殊分组",
+    "is_active": true,
+    "in_key_whitelist": false,
+    "billing_method": "按次",
+    "base_price": 0.4118,
+    "success_rate_24h": 68.0577849117175,
+    "avg_response_seconds": 94.88,
+    "options": []
+   }
+  ]
+ }
+}

@@ -1,0 +1,147 @@
+{
+ "text": "Turn off the light and look up. Every finger paints the ceiling. Twelve lights in every bag. Tap the cart now.",
+ "language": "en",
+ "note": "synthetic transcript for the offline quickstart",
+ "segments": [
+  {
+   "start": 0,
+   "end": 8.8,
+   "text": "Turn off the light and look up. Every finger paints the ceiling.",
+   "words": [
+    {
+     "word": " Turn",
+     "start": 0.2,
+     "end": 0.8,
+     "probability": 0.99
+    },
+    {
+     "word": " off",
+     "start": 0.9,
+     "end": 1.5,
+     "probability": 0.99
+    },
+    {
+     "word": " the",
+     "start": 1.6,
+     "end": 2.2,
+     "probability": 0.99
+    },
+    {
+     "word": " light",
+     "start": 2.3,
+     "end": 2.9,
+     "probability": 0.99
+    },
+    {
+     "word": " and",
+     "start": 3,
+     "end": 3.6,
+     "probability": 0.99
+    },
+    {
+     "word": " look",
+     "start": 3.7,
+     "end": 4.29,
+     "probability": 0.99
+    },
+    {
+     "word": " up.",
+     "start": 4.4,
+     "end": 5,
+     "probability": 0.99
+    },
+    {
+     "word": " Every",
+     "start": 5.1,
+     "end": 5.7,
+     "probability": 0.99
+    },
+    {
+     "word": " finger",
+     "start": 5.8,
+     "end": 6.4,
+     "probability": 0.99
+    },
+    {
+     "word": " paints",
+     "start": 6.5,
+     "end": 7.1,
+     "probability": 0.99
+    },
+    {
+     "word": " the",
+     "start": 7.2,
+     "end": 7.8,
+     "probability": 0.99
+    },
+    {
+     "word": " ceiling.",
+     "start": 7.9,
+     "end": 8.49,
+     "probability": 0.99
+    }
+   ]
+  },
+  {
+   "start": 9,
+   "end": 13.5,
+   "text": "Twelve lights in every bag. Tap the cart now.",
+   "words": [
+    {
+     "word": " Twelve",
+     "start": 9.1,
+     "end": 9.5,
+     "probability": 0.99
+    },
+    {
+     "word": " lights",
+     "start": 9.57,
+     "end": 9.96,
+     "probability": 0.99
+    },
+    {
+     "word": " in",
+     "start": 10.03,
+     "end": 10.43,
+     "probability": 0.99
+    },
+    {
+     "word": " every",
+     "start": 10.5,
+     "end": 10.9,
+     "probability": 0.99
+    },
+    {
+     "word": " bag.",
+     "start": 10.97,
+     "end": 11.36,
+     "probability": 0.99
+    },
+    {
+     "word": " Tap",
+     "start": 11.43,
+     "end": 11.83,
+     "probability": 0.99
+    },
+    {
+     "word": " the",
+     "start": 11.9,
+     "end": 12.3,
+     "probability": 0.99
+    },
+    {
+     "word": " cart",
+     "start": 12.37,
+     "end": 12.76,
+     "probability": 0.99
+    },
+    {
+     "word": " now.",
+     "start": 12.83,
+     "end": 13.23,
+     "probability": 0.99
+    }
+   ]
+  }
+ ]
+}

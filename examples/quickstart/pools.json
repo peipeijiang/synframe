@@ -1,0 +1,181 @@
+{
+ "sku": "demo-finger-light",
+ "locale": "en-US",
+ "rules": {
+  "target_sec": 15,
+  "min_sec": 13.5,
+  "max_sec": 15.5,
+  "count": 3,
+  "grade": {
+   "saturation": 1.2,
+   "contrast": 1.05
+  }
+ },
+ "critical_terms": [
+  "twelve"
+ ],
+ "media": {
+  "take": "media/take.mp4",
+  "hook-a": "media/hook-a.mp4",
+  "hook-b": "media/hook-b.mp4",
+  "hook-c": "media/hook-c.mp4"
+ },
+ "asr": {
+  "take": "media/take-asr.json"
+ },
+ "hooks": [
+  {
+   "id": "H1-burst",
+   "type": "spectacle",
+   "mode": "overlay",
+   "fits": [
+    "demo"
+   ],
+   "shots": [
+    {
+     "src": "@hook-a",
+     "src_in": 0.2,
+     "dur": 2.2,
+     "note": "pattern burst"
+    }
+   ],
+   "texts": [
+    {
+     "start": 0,
+     "end": 2.2,
+     "text": "LOOK AT\nMY CEILING!"
+    }
+   ]
+  },
+  {
+   "id": "H2-bars",
+   "type": "surprise",
+   "mode": "overlay",
+   "fits": [
+    "demo"
+   ],
+   "shots": [
+    {
+     "src": "@hook-b",
+     "src_in": 0.5,
+     "dur": 1.1
+    },
+    {
+     "src": "@hook-c",
+     "src_in": 0.4,
+     "dur": 1.1
+    }
+   ],
+   "texts": [
+    {
+     "start": 0,
+     "end": 2.2,
+     "text": "WAIT FOR IT"
+    }
+   ]
+  },
+  {
+   "id": "H3-life",
+   "type": "spectacle",
+   "mode": "overlay",
+   "fits": [
+    "demo"
+   ],
+   "shots": [
+    {
+     "src": "@hook-c",
+     "src_in": 1,
+     "dur": 2.2
+    }
+   ],
+   "texts": [
+    {
+     "start": 0,
+     "end": 2.2,
+     "text": "HALLOWEEN\nIN ONE SECOND"
+    }
+   ]
+  }
+ ],
+ "bodies": [
+  {
+   "id": "B1-demo",
+   "persona": "demo-host",
+   "model": "minimax-h3",
+   "opens": [
+    "demo"
+   ],
+   "voice": [
+    {
+     "src": "@take",
+     "in": 0,
+      "out": 9,
+     "line": "Turn off the light and look up. Every finger paints the ceiling.",
+     "asr": "@take"
+    }
+   ],
+   "shots": [
+    {
+     "src": "@take",
+     "src_in": 0,
+     "dur": 3.5,
+     "lipsync": true,
+     "note": "talks to camera"
+    },
+    {
+     "src": "@hook-a",
+     "src_in": 1,
+     "dur": 2,
+     "note": "b-roll"
+    },
+    {
+     "src": "@take",
+     "src_in": 5.5,
+     "dur": 3.5,
+     "lipsync": true
+    }
+   ]
+  }
+ ],
+ "ctas": [
+  {
+   "id": "C1-cart",
+   "persona": "demo-host",
+   "model": "minimax-h3",
+   "pad": {
+    "src": "@hook-b",
+    "src_in": 0
+   },
+   "voice": [
+    {
+     "src": "@take",
+     "in": 9,
+     "out": 13.5,
+     "line": "Twelve lights in every bag. Tap the cart now.",
+     "asr": "@take"
+    }
+   ],
+   "shots": [
+    {
+     "src": "@take",
+     "src_in": 9,
+     "dur": 2.5,
+     "lipsync": true
+    },
+    {
+     "src": "@hook-b",
+     "src_in": 1.2,
+     "dur": 2.5,
+     "note": "product b-roll"
+    }
+   ],
+   "texts": [
+    {
+     "start": 2.5,
+     "end": 5,
+     "text": "TAP THE\nORANGE CART"
+    }
+   ]
+  }
+ ]
+}

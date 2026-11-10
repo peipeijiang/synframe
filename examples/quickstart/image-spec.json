@@ -1,0 +1,34 @@
+{
+ "batch_id": "quickstart-img-001",
+ "ledger": "out/ledger.sqlite3",
+ "out_dir": "out/images",
+ "reviewer": "your name",
+ "creative_plan": "brief.md",
+ "product_images": [
+  "media/product.png"
+ ],
+ "defaults": {
+  "model": "tt-image-2.6",
+  "aspect_ratio": "9:16",
+  "prompt_suffix": "Vertical 9:16, photorealistic, vivid colour. No text, no logo, no watermark."
+ },
+ "authorization": {
+  "spend_cap": 0.2,
+  "max_unit_price": 0.05,
+  "balance_reserve": 5
+ },
+ "jobs": [
+  {
+   "id": "img-A1",
+   "prompt": "Dark bedroom, a raised hand wearing the product, ceiling covered in colourful projected shapes."
+  },
+  {
+   "id": "img-A2",
+   "prompt": "Low-angle view of a living-room ceiling full of colourful projected shapes, hands only."
+  },
+  {
+   "id": "img-B1",
+   "prompt": "A young creator on her bed holds the product bag next to her face and smiles."
+  }
+ ]
+}
