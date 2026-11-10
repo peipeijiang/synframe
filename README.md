@@ -122,7 +122,7 @@ python3 install.py            # 安装到 ~/.agents/skills，然后自动体检
 | 字幕字体 | 大字与字幕；可用 `SYNFRAME_FONT` 指定 | 必需，系统字体即可 |
 | openai-whisper | `qc` 的原语言 ASR，只读本地已缓存的权重 | 可选，`pip install openai-whisper` |
 | opentimelineio | 导出 OTIO 工程 | 可选，`pip install -r requirements-optional.txt` |
-| Node.js + AJV | 运行 vendor/100x 的上游校验器 | 可选 |
+| Node.js ≥ 18 + AJV | 运行 vendor/100x 的上游校验器 | 可选，在 `vendor/100x/skills/<skill>` 里执行 `npm ci --ignore-scripts` |
 | `LK888_API_KEY` | 付费生成（tt-image-2.6、omni_flash-10s、MiniMax H3） | 付费生成时必需，体检只检查是否设置 |
 | [ad-muse](https://github.com/peipeijiang/ad-muse) | 单条镜头的商品保真与参考图路由 | 配套技能，部分脚本已收录在 vendor/admuse |
 | [100x-skill-tiktok](https://github.com/kezd088/100x-skill-tiktok) | 脚本分段、本地化、人设、视觉裂变等创意方法 | 配套技能，已收录在 vendor/100x |
@@ -151,6 +151,19 @@ python3 -m synframe generate video-spec.json --submit   # 关键帧 + 原图生�
 ```
 
 `generate` 遇到未挑图、超预算或余额不足时退出码为 3，此时没有发生扣费。重跑同一个 spec 只会轮询和补下载，不会重复提交。
+
+### 运行测试
+
+只装必需依赖时，100 个测试里有 6 个会跳过：5 个需要 OTIO，1 个需要 AJV。补齐后全部运行：
+
+```bash
+python3 -m unittest discover -s tests                   # 必需依赖：6 个跳过
+pip install -r requirements-optional.txt                # OTIO，建议装在虚拟环境里
+(cd vendor/100x/skills/100x-segment && npm ci --ignore-scripts)
+NODE_PATH=vendor/100x/skills/100x-segment/node_modules python3 -m unittest discover -s tests
+```
+
+上游校验器的自测可以单独跑：在对应 skill 目录 `npm ci --ignore-scripts` 后执行 `node scripts/validate.js --selftest`。
 
 ## 成本模型
 

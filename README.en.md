@@ -122,7 +122,7 @@ The installer only manages the `synframe*` skill directories it installed and ne
 | Caption font | Big text and captions; override with `SYNFRAME_FONT` | Required, any system font |
 | openai-whisper | Original-language ASR for `qc`; reads cached weights only | Optional, `pip install openai-whisper` |
 | opentimelineio | OTIO export | Optional, `pip install -r requirements-optional.txt` |
-| Node.js + AJV | Runs the upstream validators in vendor/100x | Optional |
+| Node.js ≥ 18 + AJV | Runs the upstream validators in vendor/100x | Optional, run `npm ci --ignore-scripts` inside `vendor/100x/skills/<skill>` |
 | `LK888_API_KEY` | Paid generation (tt-image-2.6, omni_flash-10s, MiniMax H3) | Required for paid runs; the doctor checks presence only |
 | [ad-muse](https://github.com/peipeijiang/ad-muse) | Single-shot product fidelity and reference routing | Companion skill; some scripts vendored in vendor/admuse |
 | [100x-skill-tiktok](https://github.com/kezd088/100x-skill-tiktok) | Script segmentation, localization, persona, visual fission | Companion skill; vendored in vendor/100x |
@@ -151,6 +151,19 @@ python3 -m synframe generate video-spec.json --submit   # keyframes + product ph
 ```
 
 `generate` exits with code 3 when keyframes are unpicked, the cap is exceeded or the balance is short; nothing is charged in that case. Rerunning the same spec only polls and finishes downloads; it never resubmits.
+
+### Run the tests
+
+With only the required dependencies, 6 of the 100 tests are skipped: 5 need OTIO and 1 needs AJV. To run all of them:
+
+```bash
+python3 -m unittest discover -s tests                   # required deps only: 6 skipped
+pip install -r requirements-optional.txt                # OTIO; a virtualenv is recommended
+(cd vendor/100x/skills/100x-segment && npm ci --ignore-scripts)
+NODE_PATH=vendor/100x/skills/100x-segment/node_modules python3 -m unittest discover -s tests
+```
+
+Each upstream validator also has a self-test: run `npm ci --ignore-scripts` in its skill directory, then `node scripts/validate.js --selftest`.
 
 ## Cost model
 
