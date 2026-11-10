@@ -12,13 +12,24 @@
 
 > 把一张商品图，变成一批开头各不相同、商品不走样、花费可对账的 15 秒带货视频。
 
-Synframe 是一组 Agent Skill 加一个本地命令行。它先用便宜的图片模型抽关键帧，人工挑图后才花钱生成视频；视频素材拆成 Hook、主体和 CTA 三个素材库，再按配额组合成 N 条成片，最后做技术质检。付费调用前必须有价格快照、证据文件和花费上限，创意与试听验收始终留给人。
+Synframe 是一组 Agent Skill 加一个本地命令行。它先用便宜的图片模型抽关键帧，人工挑图后才花钱生成视频；时长按各模型的单次上限和计费方式切段。批量有两种模式：Hook 裂变（唯一 Hook + 共享主体 + 轮换 CTA）和 A/B-roll 双轨重组（一条连续口播做主轴，只替换 B-roll 槽位）。成片过台词核对、开头指纹和响度质检。付费调用前必须有价格快照、证据文件和花费上限，创意与试听验收始终留给人。
 
 ## 核心亮点
 
-<p align="center"><img src="assets/highlights-1.svg" alt="亮点 01–02：先出图后出片、按计费方式用时长" width="100%"></p>
-<p align="center"><img src="assets/highlights-2.svg" alt="亮点 03–04：Hook 库批量裂变、付费前先过账本" width="100%"></p>
-<p align="center"><img src="assets/highlights-3.svg" alt="亮点 05–06：商品身份锁定、机器质检与人工验收" width="100%"></p>
+<p align="center"><img src="assets/highlights-1.svg" alt="亮点 01–02：A/B-roll 双轨重组、Hook 裂变矩阵" width="100%"></p>
+<p align="center"><img src="assets/highlights-2.svg" alt="亮点 03–04：计费感知调度、模型时长切片器" width="100%"></p>
+<p align="center"><img src="assets/highlights-3.svg" alt="亮点 05–06：关键帧抽卡、花费账本与一次提交" width="100%"></p>
+<p align="center"><img src="assets/highlights-4.svg" alt="亮点 07–08：台词核对门、开头指纹与技术质检" width="100%"></p>
+
+### 15 秒成片结构
+
+<p align="center"><img src="assets/anatomy.svg" alt="一条 15 秒成片的轨道结构：大字、Hook 与 B-roll、A-roll 画面、A-roll 人声、字幕" width="100%"></p>
+
+**A-roll**：真人口播，一条连续人声贯穿全片，露脸槽位负责信任感。
+**B-roll**：静音的产品与场景画面，盖在口播上展示卖点，可以按槽位替换。
+**Hook**：前 2.5 秒的静音画面加大字，每条成片都不一样。
+
+A/B-roll 重组目前是 Python 模块 `synframe.recombine`，还没有命令行入口。
 
 ## 工作流程
 
@@ -34,7 +45,9 @@ flowchart TD
   HK["Hook 素材<br/>omni_flash-10s 按次 · 拍满 10 秒"]:::model
   BD["主体 + CTA<br/>MiniMax H3 按秒 · 够用即停"]:::model
   POOL["素材库 pools.json<br/>synframe-assembly"]:::skill
-  RN["批量成片<br/>synframe render<br/>video-NN.mp4 + tracks"]:::tool
+  MODE{"批量模式"}:::gate
+  RN["Hook 裂变<br/>synframe render<br/>唯一 Hook · 共享主体 · 轮换 CTA"]:::tool
+  AB["A/B-roll 双轨重组<br/>synframe.recombine<br/>口播不切 · 只换 B-roll 槽位"]:::tool
   QC{"技术质检<br/>synframe qc"}:::gate
   HR{"创意与试听验收"}:::human
   OUT["交付：成片 + OTIO 轨道 + 报告"]:::output
@@ -46,7 +59,9 @@ flowchart TD
   Q2 --> HK & BD
   HK --> POOL
   BD --> POOL
-  POOL --> RN --> QC
+  POOL --> MODE
+  MODE --> RN --> QC
+  MODE --> AB --> QC
   QC -- 失败 --> POOL
   QC --> HR
   HR -- 换 Hook / 重生成 --> PL

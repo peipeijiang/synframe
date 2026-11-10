@@ -12,13 +12,24 @@
 
 > Turn one product photo into a batch of 15-second commerce videos, each with its own opening, a faithful product and an auditable spend.
 
-Synframe is a set of Agent Skills plus a local CLI. It draws keyframes on a cheap image model first and spends on video only after a person picks them. Video material is split into hook, body and CTA pools, combined into N finished videos within reuse quotas, then checked technically. No paid call goes out without a price snapshot, proof files and a spend cap. Creative and listening acceptance always stays with a person.
+Synframe is a set of Agent Skills plus a local CLI. It draws keyframes on a cheap image model first and spends on video only after a person picks them. Clip lengths follow each model's per-call maximum and billing type. Batches come in two modes: hook fission (a unique hook, a shared body, a rotating CTA) and A/B-roll recombine (one continuous voice take as the spine, with only B-roll slots swapped). Finished videos go through a line check, an opening fingerprint and loudness QC. No paid call goes out without a price snapshot, proof files and a spend cap. Creative and listening acceptance always stays with a person.
 
 ## Highlights
 
-<p align="center"><img src="assets/highlights-1.en.svg" alt="Highlights 01-02: images first, duration follows billing" width="100%"></p>
-<p align="center"><img src="assets/highlights-2.en.svg" alt="Highlights 03-04: hook pool batches, ledger before spend" width="100%"></p>
-<p align="center"><img src="assets/highlights-3.en.svg" alt="Highlights 05-06: product identity lock, machine QC and human sign-off" width="100%"></p>
+<p align="center"><img src="assets/highlights-1.en.svg" alt="Highlights 01-02: A/B-roll dual-track recombine, hook fission matrix" width="100%"></p>
+<p align="center"><img src="assets/highlights-2.en.svg" alt="Highlights 03-04: billing-aware scheduling, model-cap slicer" width="100%"></p>
+<p align="center"><img src="assets/highlights-3.en.svg" alt="Highlights 05-06: keyframe gacha, spend ledger and one-shot submit" width="100%"></p>
+<p align="center"><img src="assets/highlights-4.en.svg" alt="Highlights 07-08: line check gate, opening fingerprint and tech QC" width="100%"></p>
+
+### Anatomy of 15 seconds
+
+<p align="center"><img src="assets/anatomy.en.svg" alt="Track layout of a 15-second video: big text, hook and B-roll, A-roll picture, A-roll voice, captions" width="100%"></p>
+
+**A-roll**: the creator on camera. One continuous voice take runs the whole video, and the face slots build trust.
+**B-roll**: muted product and scene footage laid over the voice to show the claims. It can be swapped slot by slot.
+**Hook**: the first 2.5 seconds of muted footage with big text, different in every video.
+
+A/B-roll recombine is currently the Python module `synframe.recombine`; it has no CLI entry yet.
 
 ## Workflow
 
@@ -34,7 +45,9 @@ flowchart TD
   HK["Hook footage<br/>omni_flash-10s per call · fill 10 s"]:::model
   BD["Body + CTA<br/>MiniMax H3 per second · only what's needed"]:::model
   POOL["Pools pools.json<br/>synframe-assembly"]:::skill
-  RN["Batch render<br/>synframe render<br/>video-NN.mp4 + tracks"]:::tool
+  MODE{"Batch mode"}:::gate
+  RN["Hook fission<br/>synframe render<br/>unique hook · shared body · rotating CTA"]:::tool
+  AB["A/B-roll recombine<br/>synframe.recombine<br/>voice never cut · swap B-roll slots"]:::tool
   QC{"Technical QC<br/>synframe qc"}:::gate
   HR{"Creative and listening review"}:::human
   OUT["Delivery: videos + OTIO tracks + reports"]:::output
@@ -46,7 +59,9 @@ flowchart TD
   Q2 --> HK & BD
   HK --> POOL
   BD --> POOL
-  POOL --> RN --> QC
+  POOL --> MODE
+  MODE --> RN --> QC
+  MODE --> AB --> QC
   QC -- fail --> POOL
   QC --> HR
   HR -- new hook / regenerate --> PL
